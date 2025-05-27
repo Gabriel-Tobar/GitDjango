@@ -9,6 +9,7 @@ app_name = 'app'
 
 #Começa a lista de rotas
 urlpatterns = [
+
     #Cria um caminho quando eu digitar login/ eu vou para login.html quando eu executo oque aparece vem de views
     path('login/', views.login_view, name='login'),
 

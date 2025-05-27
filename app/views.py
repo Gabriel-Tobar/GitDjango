@@ -1,21 +1,43 @@
-# Importa a função render, que carrega e exibe um arquivo HTML
-from django.shortcuts import render
+#Faz um caminho para mostrar arquivos HTML
+#Caminho para autentificação de login
 
-# Esta função será chamada quando o usuário acessar /app/login/
+#Importa render = mostra arquivos HTML e redirect = redireciona arquivos de um para o outro
+from django.shortcuts import render, redirect
+
+#Impora o bando de dados para consultalo na autentificação
+from .models import Usuario
+
+#Mostra mensagens de erro
+from django.contrib import messages
+
+#Cria uma função para quando digitar /algo va para esta pagina
 def login_view(request):
-    # O Django vai procurar um arquivo chamado login.html dentro da pasta templates/
-    return render(request, 'login.html')
+    #Se usuario enviou o formulario então:
+    if request.method == 'POST':
 
-#REQUEST: Requisição do usuario, o usuario tem que requerir algo dentro da pagina
+        #Pega os dados que o usuario digitou
+        nome = request.POST['usuario']#[ser igual ao HTML]
+        email = request.POST['email']#[ser igual ao HTML]
+        senha = request.POST['senha']#[ser igual ao HTML]
 
-# Esta função será chamada quando o usuário acessar /app/parabens/
+        # Se o usuario já existe enão:
+        if Usuario.objects.filter(nome_usuario=nome).exists():
+            #Mostra mensagem de erro e volta para a tela de login
+            messages.error(request, 'Usuário já existe')
+            return redirect('login')
+        #Se email ja existe volta para a tela de login e fala um erro
+        if Usuario.objects.filter(email=email).exists():
+            messages.error(request, 'Email já cadastrado')
+            return redirect('login')
+        #Se os dados estão certos ele acessa a pagina parabens
+        Usuario.objects.create(nome_usuario=nome, email=email, senha=senha)
+        return redirect('parabens') 
+
+    return render(request, 'login.html')  # Abre a tela se for GET
+
+#Cria uma função para quando digitar /algo va para esta pagina
 def parabens_view(request):
-    # O Django vai carregar o arquivo parabens.html e mostrar na tela
     return render(request, 'parabens.html')
 
-
-# return: devolve uma resposta
-# render(...): chama o Django para carregar e mostrar um arquivo HTML
-# request: a requisição do usuário
-# 'login.html': nome do arquivo HTML que será carregado da pasta templates/
-
+#GET: Pega info
+#POST: Envia info

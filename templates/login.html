@@ -1,11 +1,40 @@
-{% load static %}
+{% load static %} <!-- Busca arquivos estaticos no HTML -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>Login</title>
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'login.css' %}"> <!-- CSS do html em django-->
 </head>
 <body>
-    <h1>Login</h1>
+    <!--Cria um formulario com metodo de pegar dados, esses dados sao enviados para views onde faz a função de login-->
+    <form class="form" method="POST" action="/app/login/">
+        <!--Obrigatorio em qualquer formulario, protege seu formulario contra ataques-->
+        {% csrf_token %}
+
+        <!--Se houver erro ele mostra uma mensagem \massages.tags é um jeito de estilizar o erro-->
+        <!-- O erro é procurado em views onde esta na função do login-->
+         <!--Mostra mensagem de erro tambem-->
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <p class="message {{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!--Span é como o titulo e subtitulo como esta na class-->
+        <span class="title">Login</span>
+        <span class="subtitle">Crie sua conta abaixo</span>
+        
+        <!--3 campos para o usuario inserir, com tipos de texto email e senha, tem que ter nome obrigatoriamente-->
+        <!--Nome required e placeholder sao obrigatorios-->
+        <div class="form-container">
+            <input type="text" class="input" name="usuario" placeholder="Usuario" required>
+            <input type="email" class="input" name="email" placeholder="Email" required>
+            <input type="password" class="input" name="senha" placeholder="Senha" required>
+        </div>
+        <!-- Botao para enviar formulario para o banco e verificar-->
+        <button type="submit">Entrar</button>
+    </form>
 </body>
 </html>

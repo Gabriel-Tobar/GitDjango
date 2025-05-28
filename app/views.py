@@ -23,15 +23,16 @@ def login_view(request):
         # Se o usuario já existe enão:
         if Usuario.objects.filter(nome_usuario=nome).exists():
             #Mostra mensagem de erro e volta para a tela de login
-            messages.error(request, 'Usuário já existe')
-            return redirect('login')
+            messages.error(request, 'Usuário já existe, tente novamente')
+            return redirect('app:login')
         #Se email ja existe volta para a tela de login e fala um erro
         if Usuario.objects.filter(email=email).exists():
-            messages.error(request, 'Email já cadastrado')
-            return redirect('login')
+            messages.error(request, 'Email já cadastrado, tente novamente')
+            return redirect('app:login')
         #Se os dados estão certos ele acessa a pagina parabens
         Usuario.objects.create(nome_usuario=nome, email=email, senha=senha)
-        return redirect('parabens') 
+        messages.success(request, 'Conta criada com sucesso! Bem-vindo.') #Mensagem de sucesso
+        return redirect('app:parabens') 
 
     return render(request, 'login.html')  # Abre a tela se for GET
 
@@ -39,5 +40,7 @@ def login_view(request):
 def parabens_view(request):
     return render(request, 'parabens.html')
 
+#app:nome: Vai direto para a pagina sem erro
 #GET: Pega info
-#POST: Envia info
+#POST: Envia info faça com que quando eu digitar um usuario ou email igual nao fique dando uma pagina de erro, so mostre que o usuario ja existe e ele tem que criar outro nao uma pagina so de erro
+

@@ -12,4 +12,6 @@ urlpatterns = [
 
     #Cria um caminho onde vai deste urls.py para o urls.py do meu app (cria um caminho daqui para lá)
     path('app/', include('app.urls'))
+
+    #Acessar /app/login
 ]
